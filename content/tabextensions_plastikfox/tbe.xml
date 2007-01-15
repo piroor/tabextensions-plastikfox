@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<bindings id="tabbrowserExtensionsBindings"
+   xmlns="http://www.mozilla.org/xbl"
+   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:xbl="http://www.mozilla.org/xbl">
+  
+  
+  <!-- ::: Special tab widget for Tabbrowser extensions ::::::::::::::::::::::::::::::::: -->
+  <binding id="tab" extends="chrome://tabextensions/content/tabextensions.xml#tab">
+	<content> 
+	  <xul:image class="tab-icon" tabclass="tab-icon-hidden" xbl:inherits="src=image"/>
+	  <xul:image class="tab-left-border" />
+	  <xul:hbox class="tab-middle tab-image-middle box-inherit" xbl:inherits="align,dir,pack,orient,selected" flex="1">
+		<xul:hbox class="tab-dropmarker-before"/>
+		<xul:stack class="tab-icon">
+		  <xul:image xbl:inherits="validate,src=image" class="tab-icon-image" tabclass="tab-icon-active"/>
+		  <xul:image class="tab-extra-status"/>
+		  <xul:spacer/>
+		</xul:stack>
+		<xul:stack class="tab-text-container" flex="1">
+		  <xul:hbox class="tab-text-background" flex="1"/>
+		  <xul:progressmeter class="tab-progress" flex="1" mode="normal" value="0"
+				xbl:inherits="value=tab-progress"/>
+		  <xul:label class="tab-text" flex="1"
+				xbl:inherits="value=label,accesskey,crop,disabled"/>
+		</xul:stack>
+		<xul:toolbarbutton tabclass="tab-closebutton" class="tabs-closebutton close-button"/>
+		<xul:hbox class="tab-dropmarker-after"/>
+	  </xul:hbox>
+	  <xul:image class="tab-right-border" />
+	</content>
+  </binding>
+
+
+  <!-- I've tried to bind the tabbrowser and it's child the tabbox widget but it doesn't work. -->
+  <!-- It only works with the child of the tabbox widget, which is a hbox that doesn't have any binding. -->
+  <binding id="hbox">
+	<implementation>
+	  <constructor>
+        <![CDATA[
+		  // This binding is only going to be used with tabbrowser extensions, so we can suppose this widget
+		  // is a child of tabbox, which is a child of the tabbrowser we're interested in.
+		  var tabbrowser = this.parentNode.parentNode;
+
+
+		  // Add the function updateTabPropts()
+		  tabbrowser.updateTabPropts = function () {
+			var i, p, selectedTabIndex = 0;
+
+			p = this.mTabContainer.childNodes;
+			
+			if (p.length) {
+				for (i = 0; i < p.length; i++) {
+					p[i].removeAttribute ("first-tab");
+					p[i].removeAttribute ("last-tab");
+					p[i].removeAttribute ("beforeselected");
+					p[i].removeAttribute ("afterselected");
+					
+					// When TBE is active, we can't rely on the tabs order in the childNodes array.
+
+					if (i == 0)
+						p[i].setAttribute ("first-tab", true);
+
+					if (i == p.length-1)
+						p[i].setAttribute ("last-tab", true);
+			
+					if (p[i].selected)
+						selectedTabIndex = i;
+				}
+
+				// Find the previous and next tab to the selected tab
+				if (selectedTabIndex > 0)
+					p[selectedTabIndex-1].setAttribute ("beforeselected", true);
+				
+				if (selectedTabIndex < p.length-1)
+					p[selectedTabIndex+1].setAttribute ("afterselected", true);
+			}
+		  };
+
+		  // Bind the onTabsModified method
+		  tabbrowser.__mozillux__onTabsModified = tabbrowser.onTabsModified;
+		  tabbrowser.onTabsModified = function () {
+			var t;
+
+			t = this.__mozillux__onTabsModified();
+
+			// Refresh the tabs
+			this.updateTabPropts();
+
+			return t;
+		  };
+        ]]>
+      </constructor>
+	</implementation>
+  </binding>
+</bindings>

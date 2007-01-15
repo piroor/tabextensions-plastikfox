@@ -1,0 +1,42 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+
+/* ===== global.css =====================================================
+  == Styles that apply everywhere.
+  ======================================================================= */
+
+/* ::::: Fix for the Tabbrowser extensions ::::: */
+tabbrowser .tabbrowser-strip.tabbrowser-strip-top    tab,
+tabbrowser .tabbrowser-strip.tabbrowser-strip-bottom tab,
+tabbrowser .tabbrowser-strip.tabbrowser-strip-left   tab,
+tabbrowser .tabbrowser-strip.tabbrowser-strip-right  tab {
+  -moz-binding: url("chrome://tabextensions_plastikfox/content/tbe.xml#tab") !important;
+}
+
+tabbrowser.tabbrowser-tabbar-top    hbox.tabbrowser-strip-top,
+tabbrowser.tabbrowser-tabbar-bottom hbox.tabbrowser-strip-bottom,
+tabbrowser.tabbrowser-tabbar-left   hbox.tabbrowser-strip-left,
+tabbrowser.tabbrowser-tabbar-right  hbox.tabbrowser-strip-right {
+  -moz-binding: url("chrome://tabextensions_plastikfox/content/tbe.xml#hbox") !important;
+}
+
+
+
+
+/* ===== tabbox.css =================================================
+  == Styles used by XUL tab-related elements.
+  ======================================================================= */
+
+.tab-middle {
+  padding: 6px 4px 6px 7px;
+}
+
+.tab-text {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tab-bottom hbox.tab-middle {
+  padding: 6px 4px 6px 7px;
+}
+
