@@ -8,9 +8,11 @@
                    em:version="1.0.2005022101"
                    em:creator="SHIMODA Hiroshi"
                    em:description="Patch for the theme, Plastikfox Crystal SVG"
-                   em:homepageURL="http://piro.sakura.ne.jp/xul/_tabextensions_modules.html"
+                   em:homepageURL="http://piro.sakura.ne.jp/xul/_tabextensions_modules.html">
+<!--
                    em:iconURL=""
-                   em:optionsURL="">
+                   em:optionsURL=""
+-->
 
 
     <em:updateURL>https://pub.cozmixng.org/~piro/xul/xul.rdf.en</em:updateURL>
